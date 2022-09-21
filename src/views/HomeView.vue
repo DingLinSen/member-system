@@ -9,7 +9,10 @@ export default {
   data() {
     return {
       page:1,
-      size:10
+      size:10,
+      test:{
+        name:'jack'
+      }
     }
   },
   created() {
@@ -18,12 +21,13 @@ export default {
   },
   methods: {
     getMemberList(){
-      api.getMemberList(this.page,this.size).then(response=>{
+      api.getMemberList(this.page,this.size,this.test).then(response=>{
         console.log(response);
       }).catch(error=>{
         console.log(error);
       })
     },
+    
      getSupplierList(){
       api.getSupplierList(this.page,this.size).then(response=>{
         console.log(response);

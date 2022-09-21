@@ -32,4 +32,15 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+// 解决不同请求方式时统一使用data来传参
+
+const request = (options) => {
+  options.method = options.method || 'get'
+  if (options.method.toLowerCase() == 'get') {
+    ;(options.params = options.data || options), params
+    delete options.data
+  }
+  service(options)
+}
+
+export default request
