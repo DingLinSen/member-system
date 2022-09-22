@@ -10,6 +10,11 @@ const routes = [
     name: 'login',
     component: Login,
   },
+  {
+    path:'/',
+    name:'layout',
+    component:()=>import ('../layoyt')
+  }
 ]
 
 const router = new VueRouter({
