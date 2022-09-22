@@ -17,3 +17,11 @@ export const userInfo=()=>{
     method:'GET'
   })
 }
+
+// 退出登录
+export const logout=()=>{
+  return request({
+    url:'/admin/logout',
+    method:'POST'
+  })
+}

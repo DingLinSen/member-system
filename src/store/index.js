@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { login, userInfo } from '../api/user.js'
+import { login, userInfo, logout } from '../api/user.js'
 import { setToken, getToken, setUserInfo, getUserInfo } from '../utils/auth'
 
 Vue.use(Vuex)
@@ -14,6 +14,10 @@ export default new Vuex.Store({
   getters: {
     token(state) {
       return state.token
+    },
+    userInfo(state) {
+      // console.log(state.userInfo);
+      return state.userInfo
     },
   },
   mutations: {
@@ -48,6 +52,14 @@ export default new Vuex.Store({
       } catch (error) {
         console.log(error.message)
       }
+    },
+
+    // 退出登录
+    async handleLogout({ commit }) {
+      const response = await logout()
+      commit('SET_TOKEN','')
+      commit('SET_USER_INFO','')
+      return response
     },
 
     // DIS_SET_TOKEN({ commit }, token) {
