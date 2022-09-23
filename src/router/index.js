@@ -14,6 +14,7 @@ const routes = [
     path: '/',
     name: 'layout',
     component: () => import('../layoyt'),
+    redirect: '/index',
     children: [
       {
         path: 'index',
