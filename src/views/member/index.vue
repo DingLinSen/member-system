@@ -145,9 +145,9 @@ export default {
     // 获取登录列表数据
     async getMemberList() {
       try {
-        const { rows, total } = await memberApi.getMemberList(this.page, this.size, this.memberQueryParams)
+        const { rows, count } = await memberApi.getMemberList(this.page, this.size, this.memberQueryParams)
         this.memberList = rows
-        this.total = total
+        this.total = count
       } catch (error) {
         console.log(error.message)
       }
@@ -180,6 +180,8 @@ export default {
       })
         .then(async () => {
           try {
+            this.page = 1
+            this.handleReset('memberQueryForm')
             const response = await memberApi.deleteMemberList(id)
             this.$message({
               type: 'success',

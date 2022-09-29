@@ -1,9 +1,9 @@
 <template>
   <div class="mt-2">
-    <el-form :inline="true" :form="form" :formData="formData" class="demo-form-inline">
-      <template v-for="(item, index) in formData">
-        <el-form-item>
-          <el-input v-model="formData[item.prop]" :placeholder="item.placeholder"></el-input>
+    <el-form ref="form" :inline="true" :model="value" class="demo-form-inline">
+      <template v-for="(item, index) in formItem">
+        <el-form-item :prop="item.prop">
+          <el-input v-model="value[item.prop]" :placeholder="item.placeholder"></el-input>
         </el-form-item>
       </template>
       <el-form-item>
@@ -15,13 +15,18 @@
 <script>
 export default {
   props: {
-    form: {
+    value: {
       type: Object,
       default: () => {},
     },
-    formData: {
+    formItem: {
       type: Array,
       default: () => [],
+    },
+  },
+  methods: {
+    handleResetForm() {
+      this.$refs['form'].resetFields()
     },
   },
 }

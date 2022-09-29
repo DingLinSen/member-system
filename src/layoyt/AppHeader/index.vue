@@ -6,7 +6,7 @@
     </router-link>
     <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">
-        {{ $store.getters.userInfo.name || '' }}
+        {{ $store.getters.userInfo.username || '' }}
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">

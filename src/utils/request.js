@@ -9,7 +9,32 @@ const exceptionMessage = {
 
 // 引入element-ui的message
 import { Message } from 'element-ui'
+// 引入vuex
 import store from '../store'
+// 引入删除本地touken和userInfo
+import {removeTokenAndUserInfo} from './auth'
+// 引入loading
+import { Loading } from 'element-ui'
+
+// 封装loading加载
+const loading = {
+  loadingInstance: null,
+  open() {
+    if (!this.loadingInstance) {
+      this.loadingInstance = Loading.service({
+        target: '.el-mian',
+        text: '拼命加载中...',
+        background: 'rgba(0,0,0,.4)',
+      })
+    }
+  },
+  close() {
+    if (this.loadingInstance !== null) {
+      this.loadingInstance.close()
+      this.loadingInstance = null
+    }
+  },
+}
 
 // 创建axios实例配置,返回实例对象
 const service = axios.create({
@@ -23,9 +48,16 @@ service.interceptors.request.use(
     // 在发送请求之前做些什么
     const token = store.getters.token
     if (token) config.headers.authorization = 'Bearer ' + token
+
+    // 开启loading
+    loading.open()
+
     return config
   },
   function (error) {
+    // 关闭loading
+    loading.close()
+
     // 对请求错误做些什么
     return Promise.reject(error)
   }
@@ -34,12 +66,23 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
   function (response) {
+    // 关闭loading
+    loading.close()
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
     if (response.status < 400) {
-      return response.data.data
+      if (response.data.data) {
+        return response.data.data
+      } else {
+        return response.data.msg
+      }
     }
     if (response.status === 401) {
+      store.commit('SET_TOKEN','')
+      store.commit('SET_USER_INFO','')
+      removeTokenAndUserInfo()
+      // 跳转到登录页
+      router.replace('/login')
       // token过期处理
       return
     }
@@ -48,6 +91,8 @@ service.interceptors.response.use(
     return response
   },
   function (error) {
+    // 关闭loading
+    loading.close()
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
     return Promise.reject(error)
